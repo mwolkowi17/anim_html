@@ -33,7 +33,7 @@ function App() {
   const ElSinusoid = [];
 
   for (let i = 0; i < 100; i++) {
-    ElSinusoid.push([Math.sin(i * 0.5), 0, i])
+    ElSinusoid.push([Math.sin(i * 0.8), 0, i])
   }
 
   const OurGroup = ElSinusoid.map((element, i) => (<group position={[0, 0, -50]}>
