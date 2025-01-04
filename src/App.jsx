@@ -3,6 +3,7 @@ import React, { useRef, useState } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { OrbitControls, Html } from '@react-three/drei'
 import { element } from 'three/tsl'
+import { MathUtils } from 'three'
 
 
 function Box(props) {
@@ -12,8 +13,19 @@ function Box(props) {
   const [hovered, setHover] = useState(false)
   const [active, setActive] = useState(false)
   // Subscribe this component to the render-loop, rotate the mesh every frame
-  useFrame((state, delta) => (meshRef.current.rotation.x += delta))
+  // useFrame((state, delta) => (meshRef.current.rotation.x += delta))
   // Return view, these are regular three.js elements expressed in JSX
+  useFrame(() => {
+    meshRef.current.rotation.x = hovered
+      ? MathUtils.lerp(meshRef.current.rotation.x, -Math.PI * 2, 0.025)
+      : MathUtils.lerp(meshRef.current.rotation.x, 0, 0.025)
+
+    meshRef.current.position.z = active
+      ? MathUtils.lerp(meshRef.current.position.z, 0, 0.025)
+      : MathUtils.lerp(meshRef.current.position.z, -1, 0.025)
+
+    // meshRef.current.material.color.lerp(active ? colorTo : black, 0.025)
+  })
   return (
     <mesh
       {...props}
@@ -52,9 +64,9 @@ function App() {
         <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} decay={0} intensity={Math.PI} />
         <pointLight position={[-10, -10, -10]} decay={0} intensity={Math.PI} />
 
-        {/* <Box position={[-1.2, 0, 0]} />
-        <Box position={[1.2, 0, 0]} /> */}
-        {OurGroup}
+        <Box position={[-1.2, 0, 0]} />
+        <Box position={[1.2, 0, 0]} />
+        {/* {OurGroup} */}
         {/* <group>
           <mesh >
             <boxGeometry args={[2, 2.6, 0.1]} />
