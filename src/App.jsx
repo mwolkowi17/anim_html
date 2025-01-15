@@ -1,7 +1,7 @@
 import './App.css'
 import React, { useRef, useState } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
-import { OrbitControls, Html } from '@react-three/drei'
+import { OrbitControls, Html, Scroll, ScrollControls, useScroll } from '@react-three/drei'
 import { element } from 'three/tsl'
 import { MathUtils } from 'three'
 
@@ -12,17 +12,18 @@ function Box(props) {
   // Set up state for the hovered and active state
   const [hovered, setHover] = useState(false)
   const [active, setActive] = useState(false)
+  const data = useScroll()
   // Subscribe this component to the render-loop, rotate the mesh every frame
   // useFrame((state, delta) => (meshRef.current.rotation.x += delta))
   // Return view, these are regular three.js elements expressed in JSX
   useFrame(() => {
-    meshRef.current.rotation.x = hovered
-      ? MathUtils.lerp(meshRef.current.rotation.x, -Math.PI * 2, 0.025)
-      : MathUtils.lerp(meshRef.current.rotation.x, 0, 0.025)
+    // meshRef.current.rotation.x = hovered
+    //   ? MathUtils.lerp(meshRef.current.rotation.x, -Math.PI * 2, 0.025)
+    //   : MathUtils.lerp(meshRef.current.rotation.x, 0, 0.025)
 
-    meshRef.current.position.z = active
-      ? MathUtils.lerp(meshRef.current.position.z, 0, 0.025)
-      : MathUtils.lerp(meshRef.current.position.z, -1, 0.025)
+    meshRef.current.position.z = data.curve(1 / 3, 1 / 3, 0.001)
+    // ? MathUtils.lerp(meshRef.current.position.z, 0, 0.025)
+    // : MathUtils.lerp(meshRef.current.position.z, -1, 0.025)
 
     // meshRef.current.material.color.lerp(active ? colorTo : black, 0.025)
   })
@@ -63,11 +64,13 @@ function App() {
         <ambientLight intensity={Math.PI / 2} />
         <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} decay={0} intensity={Math.PI} />
         <pointLight position={[-10, -10, -10]} decay={0} intensity={Math.PI} />
-
-        <Box position={[-1.2, 0, 0]} />
-        <Box position={[1.2, 0, 0]} />
-        {/* {OurGroup} */}
-        {/* <group>
+        ;<ScrollControls pages={3} damping={0.1}>
+          <Scroll>
+            <Box position={[-1.2, 0, 0]} />
+            <Box position={[1.2, 0, 0]} />
+          </Scroll>
+          {/* {OurGroup} */}
+          {/* <group>
           <mesh >
             <boxGeometry args={[2, 2.6, 0.1]} />
             <meshPhongMaterial attach="material" color={'rgba(0,127,100,  0.40534638195481165)'} />
@@ -76,7 +79,7 @@ function App() {
             <div style={{ backgroundColor: 'green', transform: 'scale(2)' }}>Html</div>
           </Html>
         </group> */}
-        <OrbitControls />
+        </ScrollControls>
       </Canvas >
     </>
   )
