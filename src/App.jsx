@@ -22,12 +22,16 @@ function Box(props) {
   // })
 
   useFrame(() => {
-    meshRef.current.rotation.x = active
-      ? MathUtils.lerp(meshRef.current.rotation.x, -Math.PI * 2, 0.025)
-      : MathUtils.lerp(meshRef.current.rotation.x, 0, 0.025)
+    // meshRef.current.rotation.x = active
+    //   ? MathUtils.lerp(meshRef.current.rotation.x, -Math.PI * 2, 0.025)
+    //   : MathUtils.lerp(meshRef.current.rotation.x, 0, 0.025)
+    const a = data.range(0, 1 / 3)
+    console.log(a);
+    meshRef.current.rotation.x = MathUtils.lerp(meshRef.current.rotation.x, -Math.PI * a, 0.025)
   })
-  const { scale, position } = useSpring({ scale: active ? 1.5 : 1, position: active ? 1.5 : 1 })
+  const { scale, position } = useSpring({ scale: active ? 1.5 : 1, position: active ? 1.5 : 0 })
   return (
+
     <animated.mesh
       {...props}
       ref={meshRef}
@@ -39,6 +43,7 @@ function Box(props) {
       <boxGeometry args={[1, 1, 1]} />
       <meshStandardMaterial color={hovered ? 'hotpink' : 'orange'} />
     </animated.mesh>
+
   )
 }
 
@@ -63,14 +68,14 @@ function App() {
         <ambientLight intensity={Math.PI / 2} />
         <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} decay={0} intensity={Math.PI} />
         <pointLight position={[-10, -10, -10]} decay={0} intensity={Math.PI} />
-        {/* <ScrollControls pages={3} damping={0.1}> */}
-        {/* <Scroll> */}
-        <Box position={[-1.2, 0, 0]} />
+        <ScrollControls pages={1} damping={0.1} style={{}}>
+          <Scroll>i
+            <Box position={[-1.2, 0, 0]} />
 
-        {/* </Scroll> */}
+          </Scroll>
 
-        {/* </ScrollControls> */}
-        <OrbitControls />
+        </ScrollControls>
+
       </Canvas >
     </>
   )
