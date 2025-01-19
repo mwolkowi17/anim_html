@@ -28,6 +28,7 @@ function Box(props) {
     const a = data.range(0, 1 / 3)
     console.log(a);
     meshRef.current.rotation.x = MathUtils.lerp(meshRef.current.rotation.x, -Math.PI * a, 0.025)
+    meshRef.current.position.x = MathUtils.lerp(meshRef.current.position.x, Math.PI * a, 0.025)
   })
   const { scale, position } = useSpring({ scale: active ? 1.5 : 1, position: active ? 1.5 : 0 })
   return (
