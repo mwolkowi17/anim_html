@@ -48,15 +48,59 @@ function Box(props) {
   )
 }
 
+function SinusBoxes(props) {
+  const meshRef1 = useRef()
+  const data1 = useScroll()
+
+  useFrame(() => {
+    // meshRef.current.rotation.x = active
+    //   ? MathUtils.lerp(meshRef.current.rotation.x, -Math.PI * 2, 0.025)
+    //   : MathUtils.lerp(meshRef.current.rotation.x, 0, 0.025)
+    const a = data1.range(0, 1 / 3)
+    console.log(a);
+    meshRef1.current.rotation.x = MathUtils.lerp(meshRef1.current.rotation.x, -Math.PI * a, 0.025)
+    meshRef1.current.position.x = MathUtils.lerp(meshRef1.current.position.x, Math.PI * a, 0.025)
+  })
+
+  const ElPositionSet2 = [[0, 0, 0], [1, 0, 1], [2, 0, 2]]
+  const ElSinusoid2 = [];
+
+  for (let i = 0; i < 100; i++) {
+    ElSinusoid2.push([Math.sin(i * 0.7), 0, i])
+  }
+
+  const OurGroup2 = ElSinusoid2.map((element, i) => (<group position={[0, 0, -50]}>
+    <animated.mesh ref={meshRef1} >
+      <mesh key={i} position={element}  >
+        <boxGeometry args={[2, 1, 0.1]} />
+        <meshPhongMaterial attach="material" color={'rgba(0,127,100,  0.40534638195481165)'} />
+      </mesh>
+    </animated.mesh>
+  </group>))
+  return (
+    { OurGroup2 }
+  )
+}
+
 function App() {
+  const data = useScroll()
+  const meshRef = useRef()
+  // useFrame(() => {
+  //   const a = data.range(0, 1 / 3)
+  //   console.log(a);
+  //   meshRef.current.rotation.x = MathUtils.lerp(meshRef.current.rotation.x, -Math.PI * a, 0.025)
+  //   meshRef.current.position.x = MathUtils.lerp(meshRef.current.position.x, Math.PI * a, 0.025)
+  // })
+
   const ElPositionSet = [[0, 0, 0], [1, 0, 1], [2, 0, 2]]
   const ElSinusoid = [];
 
   for (let i = 0; i < 100; i++) {
-    ElSinusoid.push([Math.sin(i * 0.8), 0, i])
+    ElSinusoid.push([Math.sin(i * 0.7), 0, i])
   }
 
   const OurGroup = ElSinusoid.map((element, i) => (<group position={[0, 0, -50]}>
+
     <mesh key={i} position={element}  >
       <boxGeometry args={[2, 1, 0.1]} />
       <meshPhongMaterial attach="material" color={'rgba(0,127,100,  0.40534638195481165)'} />
@@ -69,14 +113,19 @@ function App() {
         <ambientLight intensity={Math.PI / 2} />
         <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} decay={0} intensity={Math.PI} />
         <pointLight position={[-10, -10, -10]} decay={0} intensity={Math.PI} />
-        <ScrollControls pages={1} damping={0.1} style={{}}>
-          <Scroll>i
+        {/* <animated.mesh ref={meshRef}> */}
+        {/* {OurGroup} */}
+        {/* </animated.mesh> */}
+        <SinusBoxes />
+        {/* <ScrollControls pages={1} damping={0.1} style={{}}>
+          <Scroll>
             <Box position={[-1.2, 0, 0]} />
+
 
           </Scroll>
 
-        </ScrollControls>
-
+        </ScrollControls> */}
+        <OrbitControls />
       </Canvas >
     </>
   )
