@@ -59,7 +59,7 @@ function SinusBoxes(props) {
     const a = data1.range(0, 1 / 3)
     console.log(a);
     meshRef1.current.rotation.x = MathUtils.lerp(meshRef1.current.rotation.x, -Math.PI * a, 0.025)
-    meshRef1.current.position.x = MathUtils.lerp(meshRef1.current.position.x, Math.PI * a, 0.025)
+    meshRef1.current.position.z = MathUtils.lerp(meshRef1.current.position.z, a, 0.05)
   })
 
   const ElPositionSet2 = [[0, 0, 0], [1, 0, 1], [2, 0, 2]]
@@ -70,15 +70,17 @@ function SinusBoxes(props) {
   }
 
   const OurGroup2 = ElSinusoid2.map((element, i) => (<group position={[0, 0, -50]}>
-    <animated.mesh ref={meshRef1} >
-      <mesh key={i} position={element}  >
+    <animated.mesh   >
+      <mesh key={i} position={element} ref={meshRef1}  >
         <boxGeometry args={[2, 1, 0.1]} />
         <meshPhongMaterial attach="material" color={'rgba(0,127,100,  0.40534638195481165)'} />
       </mesh>
     </animated.mesh>
   </group>))
   return (
-    { OurGroup2 }
+    <>
+      {OurGroup2}
+    </>
   )
 }
 
@@ -116,16 +118,17 @@ function App() {
         {/* <animated.mesh ref={meshRef}> */}
         {/* {OurGroup} */}
         {/* </animated.mesh> */}
-        <SinusBoxes />
-        {/* <ScrollControls pages={1} damping={0.1} style={{}}>
-          <Scroll>
-            <Box position={[-1.2, 0, 0]} />
 
+
+        <ScrollControls pages={1} damping={0.1} style={{}}>
+          <Scroll>
+            {/* <Box position={[-1.2, 0, 0]} /> */}
+            <SinusBoxes />
 
           </Scroll>
 
-        </ScrollControls> */}
-        <OrbitControls />
+        </ScrollControls>
+        {/* <OrbitControls /> */}
       </Canvas >
     </>
   )
