@@ -62,8 +62,10 @@ function SinusBoxes(props) {
     //meshRef1.current.rotation.x = MathUtils.lerp(meshRef1.current.rotation.x, -Math.PI * a, 0.025)
 
     //meshRef1.current.position.z = MathUtils.lerp(meshRef1.current.position.z, a, 0.05)
-    for (let i = 0; i < 20; i++) {
+    for (let i = 0; i < 19; i++) {
       refcolection[i].current.position.z = MathUtils.lerp(refcolection[i].current.position.z, a + i, 0.05)
+      refcolection[i].current.position.x = MathUtils.lerp(refcolection[i].current.position.x, refcolection[i + 1].current.position.x + a, 0.05)
+      //refcolection[i].current.position.z = MathUtils.lerp(refcolection[i].current.position.z, a + refcolection[i].current.position.z, 0.05)
     }
 
     //(state, delta) => (meshRef1.current.rotation.x += delta)
@@ -120,7 +122,7 @@ function App() {
   </group>))
   return (
     <>
-      <Canvas camera={{ fov: 75, near: 0.1, far: 1000, position: [3, 3, 5] }} >
+      <Canvas camera={{ fov: 75, near: 0.1, far: 1000, position: [2, 1, 5] }} >
         <ambientLight intensity={Math.PI / 2} />
         <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} decay={0} intensity={Math.PI} />
         <pointLight position={[-10, -10, -10]} decay={0} intensity={Math.PI} />
