@@ -51,6 +51,7 @@ function Box(props) {
 function SinusBoxes(props) {
   const meshRef1 = useRef()
   const data1 = useScroll()
+  const refcolection = []
 
   useFrame(() => {
     // meshRef.current.rotation.x = active
@@ -58,20 +59,28 @@ function SinusBoxes(props) {
     //   : MathUtils.lerp(meshRef.current.rotation.x, 0, 0.025)
     const a = data1.range(0, 1 / 3)
     console.log(a);
-    meshRef1.current.rotation.x = MathUtils.lerp(meshRef1.current.rotation.x, -Math.PI * a, 0.025)
-    meshRef1.current.position.z = MathUtils.lerp(meshRef1.current.position.z, a, 0.05)
+    //meshRef1.current.rotation.x = MathUtils.lerp(meshRef1.current.rotation.x, -Math.PI * a, 0.025)
+
+    //meshRef1.current.position.z = MathUtils.lerp(meshRef1.current.position.z, a, 0.05)
+    for (let i = 0; i < 20; i++) {
+      refcolection[i].current.position.z = MathUtils.lerp(refcolection[i].current.position.z, a + i, 0.05)
+    }
+
+    //(state, delta) => (meshRef1.current.rotation.x += delta)
+
   })
 
   const ElPositionSet2 = [[0, 0, 0], [1, 0, 1], [2, 0, 2]]
   const ElSinusoid2 = [];
 
-  for (let i = 0; i < 100; i++) {
+  for (let i = 0; i < 20; i++) {
     ElSinusoid2.push([Math.sin(i * 0.7), 0, i])
+    refcolection.push(useRef())
   }
 
-  const OurGroup2 = ElSinusoid2.map((element, i) => (<group position={[0, 0, -50]}>
-    <animated.mesh   >
-      <mesh key={i} position={element} ref={meshRef1}  >
+  const OurGroup2 = ElSinusoid2.map((element, i) => (<group position={[0, 0, -5]}>
+    <animated.mesh >
+      <mesh key={"a" + i} position={element} ref={refcolection[i]}  >
         <boxGeometry args={[2, 1, 0.1]} />
         <meshPhongMaterial attach="material" color={'rgba(0,127,100,  0.40534638195481165)'} />
       </mesh>
@@ -111,7 +120,7 @@ function App() {
   </group>))
   return (
     <>
-      <Canvas>
+      <Canvas camera={{ fov: 75, near: 0.1, far: 1000, position: [3, 3, 5] }} >
         <ambientLight intensity={Math.PI / 2} />
         <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} decay={0} intensity={Math.PI} />
         <pointLight position={[-10, -10, -10]} decay={0} intensity={Math.PI} />
@@ -124,7 +133,6 @@ function App() {
           <Scroll>
             {/* <Box position={[-1.2, 0, 0]} /> */}
             <SinusBoxes />
-
           </Scroll>
 
         </ScrollControls>
